@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        .boardBtn {
+            height: 100px;
+            width: 100px
+        }
+        .winText {
+            color: red
+        }
+        .text-center {
+            text-align: center;
+            display: block;
+        }
+        table {
+            margin-top: 10px;
+            text-align: center;
+            border-spacing: 0px;
+            border-bottom: 1px solid;
+            border-top: 1px solid;
+            border-left: 1px solid;
+            border-right: 1px solid;
+        }
+        td {
+            width: 100px;
+            height: 100px;
+            border: 1px solid;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="text-center">
+        <input type="text" placeholder="Enter Size for board" alt="Board size" id="enterNum" />
+        <button class="btn" id="enterBtn" type="button">Enter Board Size</button>
+        <table id="board">
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+<script>
+    var turn = 1;
+    var row = 0;
+    var col = 0;
+    $(document).ready(function () {
+        $('#enterBtn').click(function () {
+            makeBoard();
+        });
+        $(this).on('click', 'td', function () {
+            if (turn % 2 === 1) {
+                row = this.parentNode.rowIndex + 1; // gives table row location of click
+                col = this.cellIndex + 1; // gives table colum location of click
+                readTable($('#table'));
+                $(this).html('X');
+                turn++;
+            }
+            if (turn % 2 === 0) {
+                var row2 = randomNumber();
+                var col2 = randomNumber();
+                var val = "O";
+                insertValue(row2, col2, val);
+                var moves = [];
+                moves = readValue(col);
+                turn++;
+                alert("computer");
+            }
+        });
+    });
+    function readTable(jqueryObjTable) {
+        var cols = jqueryObjTable.children();
+        for (var c = 0; c < cols.Length; c++) {
+            var cellsInCol = cols.children();
+            for (var r = 0; r < cellsInCol.Length; r++) {}
+        }
+    }
+    function checkRow(row) { //Returns the owner of the row
+        var xcount = 0;
+        var ocount = 0;
+        var row = $('#table tbody tr')
+        for (var r in row) {
+            var cells = $(r).children('td');
+            if (cells.html() === "X")
+                xcount++;
+            if (cells.html() === "O")
+                ocount++;
+        }
+        if (xcount === row.length)
+            alert("X Wins!");
+        if (ocount === row.length)
+            alert("O WINS!!!! YOU LOSE")
+    }
+    // function checkColumn(col){ //Returns the owner of the column
+    //     var checkFor = col[0];
+    //     if(!(checkFor === "X" || checkFor === "O")) {
+    //             return "";
+    //     } 
+    //     for(var c=0; c< row.length; c++){
+    //         if(col[c] === checkFor) continue;
+    //             else return "";
+    //     }
+    //     return checkFor;
+    // }
+    //inserts an O value for the computer's turn
+    function insertValue(row, column, value) {
+        var row = $('#table tbody tr')
+        for (var r in row) {
+            var cells = $(r).children('td');
+            if (cells == column)
+                cells.html(value);
+        }
+    }
+    //scans row for and places results into an array for later 
+    //access.  This function can be used to check for wins later.
+    function readValue(column) {
+        var row = $('#table tbody tr')
+        var result = [];
+        for (var r in row) {
+            var cells = $(r).children('td').toArray();
+            if (cells !== null && cells.length >= column - 1)
+                result.push(cells[column]);
+        }
+        return result;
+    }
+    // creates a random number that is stored in a variable to be accesed later.
+    function randomNumber() {
+        var playOTurn = function () {
+            $.fn.random = function () {
+                return this.eq(Math.floor(Math.random() * this.length));
+            };
+        }
+    }
+    //function that makes board depending on user input
+    function makeBoard() {
+        var table = $("tbody").html("");
+        var rowstart = '<tr>';
+        var rowend = '</tr>';
+        var cell = '<td></td>';
+        var boardsize = $('#enterNum').val();
+        var grid_size = boardsize * boardsize;
+        //for loop to create table
+        for (var row = 0; row < boardsize; row++) {
+            boardrow = rowstart;
+            for (var col = 0; col < boardsize; col++) {
+                boardrow += cell;
+            }
+            boardrow += rowend;
+            $('#board > tbody').append(boardrow);
+        }
+    }
+</script>
+</html>
